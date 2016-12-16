@@ -108,7 +108,8 @@ Install_PHP71() {
   
   [ ! -e "$php_install_dir/etc/php.d" ] && mkdir -p $php_install_dir/etc/php.d
   /bin/cp php.ini-production $php_install_dir/etc/php.ini
-  
+# ensure memory_limit is not null.
+  Memory_limit=${Memory_limit-32}
   sed -i "s@^memory_limit.*@memory_limit = ${Memory_limit}M@" $php_install_dir/etc/php.ini
   sed -i 's@^output_buffering =@output_buffering = On\noutput_buffering =@' $php_install_dir/etc/php.ini
   sed -i 's@^;cgi.fix_pathinfo.*@cgi.fix_pathinfo=0@' $php_install_dir/etc/php.ini

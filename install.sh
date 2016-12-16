@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 # modified by yang @ 2016-12-13.
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
@@ -294,7 +294,7 @@ while :; do echo
                     fi
                   done
                 fi
-                if [[ $PHP_version =~ ^[5-6]$ ]]; then 
+                if [[ $PHP_version =~ ^[5-6]$ ]]; then
                   while :; do
                     echo 'Please select a opcode cache of the PHP:'
                     echo -e "\t${CMSG}1${CEND}. Install Zend OPcache"
@@ -476,9 +476,9 @@ esac
 #----------------------------------  Start of Function  -------------------------------------
 # init
 echo
-while :; do 
+while :; do
   read -t 15 -p "Do you want to init server? (Default n press Enter) [y/n]: " init_yn
-  [ -z $init_yn ] && init_yn=n
+  [ -z $init_yn ] && init_yn=y
   if [[ ! $init_yn =~ ^[y,n]$ ]]; then
     echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
   else

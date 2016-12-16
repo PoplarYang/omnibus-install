@@ -94,6 +94,17 @@ EOF
 
   mkdir $apache_install_dir/conf/vhost
   cat > $apache_install_dir/conf/vhost/default.conf << EOF
+# Prohibit access default virtual host by ip
+#<VirtualHost *:80>
+#    DocumentRoot "$wwwroot_dir/default"
+#    ServerName localhsot.com
+#    <Directory "$wwwroot_dir/default">
+#        Options none
+#        AllowOverride none
+#        Require all denied
+#    </Directory>
+#</VirtualHost>
+
 <VirtualHost *:$TMP_PORT>
 #	ServerAdmin admin@hiyang.com
 	DocumentRoot "$wwwroot_dir/default"
