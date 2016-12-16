@@ -577,9 +577,13 @@ esac
 if [ "$Apache_version" == '1' ]; then
   . include/apache-2.4.sh
   Install_Apache24 2>&1 | tee -a $oneinstack_dir/install.log
+# add test file
+  cp -rf test/full/* $wwwroot_dir/default/
 elif [ "$Apache_version" == '2' ]; then
   . include/apache-2.2.sh
   Install_Apache22 2>&1 | tee -a $oneinstack_dir/install.log
+# add test file
+  cp -rf test/full/* $wwwroot_dir/default/
 fi
 
 # PHP

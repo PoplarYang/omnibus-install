@@ -120,12 +120,13 @@ EOF
 	</Directory>
 	ErrorLog "$wwwlogs_dir/error_apache.log"
 	CustomLog "$wwwlogs_dir/access_apache.log" common
-#	<Location /server-status>
-#		SetHandler server-status
-#		Order Deny,Allow
-#		Deny from all
-#		Allow from 127.0.0.1
-#	</Location>
+# for check http status
+	<Location /server-status>
+		SetHandler server-status
+		Order Deny,Allow
+		Deny from all
+		Allow from 127.0.0.1
+	</Location>
 </VirtualHost>
 EOF
 

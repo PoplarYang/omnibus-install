@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 # modified by yang @ 2016-12-13.
 Install_Apache22() {
   pushd ${oneinstack_dir}/src
@@ -24,13 +24,13 @@ Install_Apache22() {
   [ -z "`grep ^'export PATH=' /etc/profile`" ] && echo "export PATH=$apache_install_dir/bin:\$PATH" >> /etc/profile
   [ -n "`grep ^'export PATH=' /etc/profile`" -a -z "`grep $apache_install_dir /etc/profile`" ] && sed -i "s@^export PATH=\(.*\)@export PATH=$apache_install_dir/bin:\1@" /etc/profile
   . /etc/profile
-  
+
   /bin/cp $apache_install_dir/bin/apachectl /etc/init.d/httpd
   sed -i '2a # chkconfig: - 85 15' /etc/init.d/httpd
   sed -i '3a # description: Apache is a World Wide Web server. It is used to serve' /etc/init.d/httpd
   chmod +x /etc/init.d/httpd
   [ "$OS" == 'CentOS' ] && { chkconfig --add httpd; chkconfig httpd on; }
-  
+
   sed -i "s@^User daemon@User $run_user@" $apache_install_dir/conf/httpd.conf
   sed -i "s@^Group daemon@Group $run_user@" $apache_install_dir/conf/httpd.conf
   if [ "$Nginx_version" == '4' -a ! -e "$web_install_dir/sbin/nginx" ]; then
@@ -47,7 +47,7 @@ Install_Apache22() {
   sed -i "s@^DocumentRoot.*@#DocumentRoot \"$wwwroot_dir/default\"@" $apache_install_dir/conf/httpd.conf
   sed -i "s@^<Directory \"$apache_install_dir/htdocs\">@<Directory \"$wwwroot_dir/default\">@" $apache_install_dir/conf/httpd.conf
   sed -i "s@^#Include conf/extra/httpd-mpm.conf@Include conf/extra/httpd-mpm.conf@" $apache_install_dir/conf/httpd.conf
-  
+
   #logrotate apache log
   cat > /etc/logrotate.d/apache << EOF
 $wwwlogs_dir/*apache.log {
@@ -69,7 +69,7 @@ EOF
 NameVirtualHost *:$TMP_PORT
 <VirtualHost *:$TMP_PORT>
     DocumentRoot "$wwwroot_dir/default"
-    ServerName 127.0.0.1
+    ServerName test.com
     <Directory "$wwwroot_dir/default">
         SetOutputFilter DEFLATE
         Options FollowSymLinks ExecCGI
@@ -80,6 +80,13 @@ NameVirtualHost *:$TMP_PORT
     </Directory>
     ErrorLog "$wwwlogs_dir/error_apache.log"
     CustomLog "$wwwlogs_dir/access_apache.log" common
+# for check http status
+    <Location /server-status>
+        SetHandler server-status
+        Order Deny,Allow
+        Deny from all
+        Allow from 127.0.0.1
+    </Location>
 </VirtualHost>
 EOF
 
@@ -110,5 +117,5 @@ EOF
   fi
   ldconfig
   service httpd start
-  popd 
+  popd
 }
