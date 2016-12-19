@@ -1,7 +1,6 @@
 #!/bin/bash
 # 
-# modified by yang @ 2016-12-13.
-#       https://github.com/lj2007331/oneinstack
+# modify by hiyang @ 2016-12-19
 
 installDepsCentOS() {
   clear

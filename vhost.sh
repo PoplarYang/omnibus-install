@@ -1,19 +1,13 @@
 #!/bin/bash
-# Author:  yeho <lj2007331 AT gmail.com>
-# BLOG:  https://blog.linuxeye.com
 #
-# Notes: OneinStack for CentOS/RadHat 5+ Debian 6+ and Ubuntu 12+
+# modify by hiyang @ 2016-12-19
 #
-# Project home page:
-#       https://oneinstack.com
-#       https://github.com/lj2007331/oneinstack
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 clear
 printf "
 #######################################################################
-#       OneinStack for CentOS/RadHat 5+ Debian 6+ and Ubuntu 12+      #
-#       For more information please visit https://oneinstack.com      #
+#                 OneinStack odm for CentOS/RadHat 5+                 #
 #######################################################################
 "
 
@@ -526,8 +520,7 @@ EOF
 
   printf "
 #######################################################################
-#       OneinStack for CentOS/RadHat 5+ Debian 6+ and Ubuntu 12+      #
-#       For more information please visit https://oneinstack.com      #
+#                 OneinStack odm for CentOS/RadHat 5+                 #
 #######################################################################
 "
   echo "$(printf "%-30s" "Your domain:")${CMSG}${domain}${CEND}"
@@ -553,8 +546,7 @@ EOF
 
   printf "
 #######################################################################
-#       OneinStack for CentOS/RadHat 5+ Debian 6+ and Ubuntu 12+      #
-#       For more information please visit https://oneinstack.com      #
+#                 OneinStack odm for CentOS/RadHat 5+                 #
 #######################################################################
 "
   echo "$(printf "%-30s" "Your domain:")${CMSG}${domain}${CEND}"
@@ -607,8 +599,7 @@ EOF
 
   printf "
 #######################################################################
-#       OneinStack for CentOS/RadHat 5+ Debian 6+ and Ubuntu 12+      #
-#       For more information please visit https://oneinstack.com      #
+#                 OneinStack odm for CentOS/RadHat 5+                 #
 #######################################################################
 "
   echo "$(printf "%-30s" "Your domain:")${CMSG}${domain}${CEND}"
@@ -692,8 +683,7 @@ EOF
 
   printf "
 #######################################################################
-#       OneinStack for CentOS/RadHat 5+ Debian 6+ and Ubuntu 12+      #
-#       For more information please visit https://oneinstack.com      #
+#                 OneinStack odm for CentOS/RadHat 5+                 #
 #######################################################################
 "
   echo "$(printf "%-30s" "Your domain:")${CMSG}${domain}${CEND}"
@@ -787,8 +777,7 @@ EOF
 
   printf "
 #######################################################################
-#       OneinStack for CentOS/RadHat 5+ Debian 6+ and Ubuntu 12+      #
-#       For more information please visit https://oneinstack.com      #
+#                 OneinStack odm for CentOS/RadHat 5+                 #
 #######################################################################
 "
   echo "$(printf "%-30s" "Your domain:")${CMSG}${domain}${CEND}"

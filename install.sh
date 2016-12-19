@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# modified by yang @ 2016-12-13.
+# modify by hiyang @ 2016-12-19
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 clear

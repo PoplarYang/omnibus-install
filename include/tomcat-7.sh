@@ -1,12 +1,7 @@
 #!/bin/bash
-# Author:  yeho <lj2007331 AT gmail.com>
-# BLOG:  https://blog.linuxeye.com
 #
-# Notes: OneinStack for CentOS/RadHat 5+ Debian 6+ and Ubuntu 12+
+# modify by hiyang @ 2016-12-19
 #
-# Project home page:
-#       https://oneinstack.com
-#       https://github.com/lj2007331/oneinstack
 
 Install_Tomcat7() {
   pushd ${oneinstack_dir}/src

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# modified by yang @ 2016-12-13.
+# modify by hiyang @ 2016-12-19
 Install_Apache22() {
   pushd ${oneinstack_dir}/src
   id -u $run_user >/dev/null 2>&1
