@@ -11,33 +11,6 @@ if [ -n "$(grep 'Aliyun Linux release' /etc/issue)" -o -e /etc/redhat-release ];
 elif [ -n "$(grep 'Amazon Linux AMI release' /etc/issue)" -o -e /etc/system-release ]; then
   OS=CentOS
   CentOS_RHEL_version=6
-elif [ -n "$(grep 'bian' /etc/issue)" -o "$(lsb_release -is 2>/dev/null)" == "Debian" ]; then
-  OS=Debian
-  [ ! -e "$(which lsb_release)" ] && { apt-get -y update; apt-get -y install lsb-release; clear; }
-  Debian_version=$(lsb_release -sr | awk -F. '{print $1}')
-elif [ -n "$(grep 'Deepin' /etc/issue)" -o "$(lsb_release -is 2>/dev/null)" == "Deepin" ]; then
-  OS=Debian
-  [ ! -e "$(which lsb_release)" ] && { apt-get -y update; apt-get -y install lsb-release; clear; }
-  Debian_version=$(lsb_release -sr | awk -F. '{print $1}')
-# kali rolling
-elif [ -n "$(grep 'Kali GNU/Linux Rolling' /etc/issue)" -o "$(lsb_release -is 2>/dev/null)" == "Kali" ]; then
-  OS=Debian
-  [ ! -e "$(which lsb_release)" ] && { apt-get -y update; apt-get -y install lsb-release; clear; }
-  if [ -n "$(grep 'VERSION="2016.*"' /etc/os-release)" ]; then
-    Debian_version=8
-  else
-    echo "${CFAILURE}Does not support this OS, Please contact the author! ${CEND}"
-    kill -9 $$
-  fi
-elif [ -n "$(grep 'Ubuntu' /etc/issue)" -o "$(lsb_release -is 2>/dev/null)" == "Ubuntu" -o -n "$(grep 'Linux Mint' /etc/issue)" ]; then
-  OS=Ubuntu
-  [ ! -e "$(which lsb_release)" ] && { apt-get -y update; apt-get -y install lsb-release; clear; }
-  Ubuntu_version=$(lsb_release -sr | awk -F. '{print $1}')
-  [ -n "$(grep 'Linux Mint 18' /etc/issue)" ] && Ubuntu_version=16
-elif [ -n "$(grep 'elementary' /etc/issue)" -o "$(lsb_release -is 2>/dev/null)" == 'elementary' ]; then
-  OS=Ubuntu
-  [ ! -e "$(which lsb_release)" ] && { apt-get -y update; apt-get -y install lsb-release; clear; }
-  Ubuntu_version=16
 else
   echo "${CFAILURE}Does not support this OS, Please contact the author! ${CEND}"
   kill -9 $$
@@ -68,20 +41,3 @@ if uname -m | grep -Eqi "arm"; then
 fi
 
 THREAD=$(grep 'processor' /proc/cpuinfo | sort -u | wc -l)
-
-# Percona
-if [[ "${OS}" =~ ^Ubuntu$|^Debian$ ]]; then
-  if [ "${Debian_version}" == '6' ]; then
-    sslLibVer=ssl098
-  else
-    sslLibVer=ssl100
-  fi
-elif [ "${OS}" == "CentOS" ]; then
-  if [ "${CentOS_RHEL_version}" == '5' ]; then
-    sslLibVer=ssl098e
-  else
-    sslLibVer=ssl101
-  fi
-else
-  sslLibVer=unknown
-fi

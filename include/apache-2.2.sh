@@ -81,12 +81,12 @@ NameVirtualHost *:$TMP_PORT
     ErrorLog "$wwwlogs_dir/error_apache.log"
     CustomLog "$wwwlogs_dir/access_apache.log" common
 # for check http status
-    <Location /server-status>
-        SetHandler server-status
-        Order Deny,Allow
-        Deny from all
-        Allow from 127.0.0.1
-    </Location>
+    <location /server-status>
+        sethandler server-status
+        order deny,allow
+        deny from all
+        allow from 127.0.0.1
+    </location>
 </VirtualHost>
 EOF
 
