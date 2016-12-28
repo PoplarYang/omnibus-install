@@ -505,6 +505,7 @@ downloadDepsSrc=1
 checkDownload 2>&1 | tee -a ${oneinstack_dir}/install.log
 
 # Install dependencies from source package
+. ./include/check_sw.sh
 installDepsBySrc 2>&1 | tee -a ${oneinstack_dir}/install.log
 
 
