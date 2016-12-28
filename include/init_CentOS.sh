@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 # modify by hiyang @ 2016-12-19
 
 clear
@@ -8,11 +8,11 @@ echo "${CBLUE}               Init CentOS${CEND}"
 echo "STEP 1: ${CMSG}closed Unnecessary services and remove obsolete rpm package${CEND}"
 [ "${CentOS_RHEL_version}" == '7' ] && [ "$(systemctl is-active NetworkManager.service)" == 'active' ] && NM_flag=1
 [ "${NM_flag}" == '1' ] && systemctl enable NetworkManager.service
-for Service in sshd network crond iptables messagebus irqbalance syslog rsyslog;do 
+for Service in sshd network crond iptables messagebus irqbalance syslog rsyslog;do
   chkconfig --level 3 ${Service} on 2> /dev/null
 done
 
-for Service in $(chkconfig --list | grep 3:on | awk '{print $1}' | grep -vE 'nginx|httpd|tomcat|mysqld|php-fpm|pureftpd|redis-server|memcached|supervisord|aegis|NetworkManager');do 
+for Service in $(chkconfig --list | grep 3:on | awk '{print $1}' | grep -vE 'nginx|httpd|tomcat|mysqld|php-fpm|pureftpd|redis-server|memcached|supervisord|aegis|NetworkManager');do
   chkconfig --level 3 ${Service} off 2> /dev/null
 done
 echo -e "${CMSG}Step 1 is successfully!${CEND}\n"
@@ -26,13 +26,15 @@ echo -e "${CMSG}Step 2 is successfully!${CEND}\n"
 # Custom profile
 echo "STEP 3: ${CMSG}Custom profile${CEND}"
 cat > /etc/profile.d/oneinstack.sh << EOF
-HISTSIZE=10000
-PS1="\[\e[37;40m\][\[\e[32;40m\]\u\[\e[37;40m\]@\h \[\e[35;40m\]\W\[\e[0m\]]\\\\$ "
+HISTSIZE=3000
+PROMPT_COMMAND="history -a"
 HISTTIMEFORMAT="%F %T \$(whoami) "
+PS1="\[\e[37;40m\][\[\e[32;40m\]\u\[\e[37;40m\]@\h \[\e[35;40m\]\W\[\e[0m\]]\\\\$ "
 
 alias l='ls -AFhlt'
 alias lh='l | head'
 alias vi=vim
+alias rz='rz -be'
 
 GREP_OPTIONS="--color=auto"
 alias grep='grep --color'
