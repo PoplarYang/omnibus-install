@@ -58,6 +58,7 @@ Install_PHP54() {
   patch -d php-$php54_version -p0 < fpm-race-condition.patch
   pushd php-$php54_version
   make clean
+
   [ ! -d "$php_install_dir" ] && mkdir -p $php_install_dir
   if [[ $Apache_version =~ ^[1-2]$ ]] || [ -e "$apache_install_dir/bin/apxs" ]; then
     ./configure --prefix=$php_install_dir --with-config-file-path=$php_install_dir/etc \
