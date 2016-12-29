@@ -5,7 +5,7 @@
 
 Install_PHP71() {
   pushd ${oneinstack_dir}/src
-  
+
   tar xzf libiconv-$libiconv_version.tar.gz
   patch -d libiconv-$libiconv_version -p0 < libiconv-glibc-2.16.patch
   pushd libiconv-$libiconv_version
@@ -13,14 +13,14 @@ Install_PHP71() {
   make -j ${THREAD} && make install
   popd
   rm -rf libiconv-$libiconv_version
-  
+
   tar xzf curl-$curl_version.tar.gz
   pushd curl-$curl_version
   ./configure --prefix=/usr/local
   make -j ${THREAD} && make install
   popd
   rm -rf curl-$curl_version
-  
+
   tar xzf libmcrypt-$libmcrypt_version.tar.gz
   pushd libmcrypt-$libmcrypt_version
   ./configure
@@ -31,18 +31,18 @@ Install_PHP71() {
   make -j ${THREAD} && make install
   popd;popd
   rm -rf libmcrypt-$libmcrypt_version
-  
+
   tar xzf mhash-$mhash_version.tar.gz
   pushd mhash-$mhash_version
   ./configure
   make -j ${THREAD} && make install
   popd
   rm -rf mhash-$mhash_version
-  
+
   echo '/usr/local/lib' > /etc/ld.so.conf.d/local.conf
   ldconfig
   [ "$OS" == 'CentOS' ] && { ln -s /usr/local/bin/libmcrypt-config /usr/bin/libmcrypt-config; [ "$OS_BIT" == '64' ] && ln -s /lib64/libpcre.so.0.0.1 /lib64/libpcre.so.1 || ln -s /lib/libpcre.so.0.0.1 /lib/libpcre.so.1; }
-  
+
   tar xzf mcrypt-$mcrypt_version.tar.gz
   pushd mcrypt-$mcrypt_version
   ldconfig
@@ -50,10 +50,10 @@ Install_PHP71() {
   make -j ${THREAD} && make install
   popd
   rm -rf mcrypt-$mcrypt_version
-  
+
   id -u $run_user >/dev/null 2>&1
   [ $? -ne 0 ] && useradd -M -s /sbin/nologin $run_user
-  
+
   tar xzf php-$php71_version.tar.gz
   pushd php-$php71_version
   make clean
@@ -85,7 +85,7 @@ Install_PHP71() {
   fi
   make ZEND_EXTRA_LIBS='-liconv' -j ${THREAD}
   make install
-  
+
   if [ -e "$php_install_dir/bin/phpize" ]; then
     echo "${CSUCCESS}PHP installed successfully! ${CEND}"
   else
@@ -93,14 +93,14 @@ Install_PHP71() {
     echo "${CFAILURE}PHP install failed, Please Contact the author! ${CEND}"
     kill -9 $$
   fi
-  
+
   [ -z "`grep ^'export PATH=' /etc/profile`" ] && echo "export PATH=$php_install_dir/bin:\$PATH" >> /etc/profile
   [ -n "`grep ^'export PATH=' /etc/profile`" -a -z "`grep $php_install_dir /etc/profile`" ] && sed -i "s@^export PATH=\(.*\)@export PATH=$php_install_dir/bin:\1@" /etc/profile
   . /etc/profile
-  
+
   # wget -c http://pear.php.net/go-pear.phar
   # $php_install_dir/bin/php go-pear.phar
-  
+
   [ ! -e "$php_install_dir/etc/php.d" ] && mkdir -p $php_install_dir/etc/php.d
   /bin/cp php.ini-production $php_install_dir/etc/php.ini
 # ensure memory_limit is not null.
@@ -118,7 +118,7 @@ Install_PHP71() {
   sed -i 's@^;realpath_cache_size.*@realpath_cache_size = 2M@' $php_install_dir/etc/php.ini
   sed -i 's@^disable_functions.*@disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server,fsocket,popen@' $php_install_dir/etc/php.ini
   [ -e /usr/sbin/sendmail ] && sed -i 's@^;sendmail_path.*@sendmail_path = /usr/sbin/sendmail -t -i@' $php_install_dir/etc/php.ini
-  
+
   [ "$PHP_cache" == '1' ] && cat > $php_install_dir/etc/php.d/ext-opcache.ini << EOF
 [opcache]
 zend_extension=opcache.so

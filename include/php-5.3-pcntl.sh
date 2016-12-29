@@ -3,7 +3,7 @@
 # modify by hiyang @ 2016-12-19
 #
 
-Install_PHP70() {
+Install_PHP53() {
   pushd ${oneinstack_dir}/src
 
   tar xzf libiconv-$libiconv_version.tar.gz
@@ -14,12 +14,33 @@ Install_PHP70() {
   popd
   rm -rf libiconv-$libiconv_version
 
-  tar xzf curl-$curl_version.tar.gz
-  pushd curl-$curl_version
-  ./configure --prefix=/usr/local
+  # Problem building php-5.3 with openssl
+  if [ "$Debian_version" == '8' -o "$Ubuntu_version" == '16' ]; then
+    if [ ! -e '/usr/local/openssl/lib/libcrypto.a' ]; then
+      tar xzf openssl-1.0.0s.tar.gz
+      pushd openssl-1.0.0s
+      ./config --prefix=/usr/local/openssl -fPIC shared zlib
+      make -j ${THREAD} && make install
+      popd
+      rm -rf openssl-1.0.0s
+    fi
+    OpenSSL_args='--with-openssl=/usr/local/openssl'
+  else
+    OpenSSL_args='--with-openssl'
+  fi
+
+  if [ "$Debian_version" == '8' -o "$Ubuntu_version" == '16' ]; then
+    tar xzf curl-7.35.0.tar.gz
+    pushd curl-7.35.0
+    LDFLAGS="-Wl,-rpath=/usr/local/openssl/lib" ./configure --prefix=/usr/local --with-ssl=/usr/local/openssl
+  else
+    tar xzf curl-$curl_version.tar.gz
+    pushd curl-$curl_version
+    ./configure --prefix=/usr/local
+  fi
   make -j ${THREAD} && make install
   popd
-  rm -rf curl-$curl_version
+  rm -rf curl-7.35.0 curl-$curl_version
 
   tar xzf libmcrypt-$libmcrypt_version.tar.gz
   pushd libmcrypt-$libmcrypt_version
@@ -43,6 +64,8 @@ Install_PHP70() {
   ldconfig
   [ "$OS" == 'CentOS' ] && { ln -s /usr/local/bin/libmcrypt-config /usr/bin/libmcrypt-config; [ "$OS_BIT" == '64' ] && ln -s /lib64/libpcre.so.0.0.1 /lib64/libpcre.so.1 || ln -s /lib/libpcre.so.0.0.1 /lib/libpcre.so.1; }
 
+  [ ! -e '/usr/include/freetype2/freetype' ] &&  ln -s /usr/include/freetype2 /usr/include/freetype2/freetype
+
   tar xzf mcrypt-$mcrypt_version.tar.gz
   pushd mcrypt-$mcrypt_version
   ldconfig
@@ -54,35 +77,37 @@ Install_PHP70() {
   id -u $run_user >/dev/null 2>&1
   [ $? -ne 0 ] && useradd -M -s /sbin/nologin $run_user
 
-  tar xzf php-$php70_version.tar.gz
-  pushd php-$php70_version
+  tar xzf php-$php53_version.tar.gz
+  patch -d php-$php53_version -p0 < fpm-race-condition.patch
+  pushd php-$php53_version
+  patch -p1 < ../php5.3patch
+  patch -p1 < ../debian_patches_disable_SSLv2_for_openssl_1_0_0.patch
   make clean
-  ./buildconf
   [ ! -d "$php_install_dir" ] && mkdir -p $php_install_dir
-  [ "$PHP_cache" == '1' ] && PHP_cache_tmp='--enable-opcache' || PHP_cache_tmp='--disable-opcache'
   if [[ $Apache_version =~ ^[1-2]$ ]] || [ -e "$apache_install_dir/bin/apxs" ]; then
     ./configure --prefix=$php_install_dir --with-config-file-path=$php_install_dir/etc \
     --with-config-file-scan-dir=$php_install_dir/etc/php.d \
-    --with-apxs2=$apache_install_dir/bin/apxs $PHP_cache_tmp --disable-fileinfo \
-    --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd \
+    --with-apxs2=$apache_install_dir/bin/apxs --disable-fileinfo \
+    --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd \
     --with-iconv-dir=/usr/local --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib \
     --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-exif \
     --enable-sysvsem --enable-inline-optimization --with-curl=/usr/local --enable-mbregex \
-    --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf --with-openssl \
-    --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-ftp --enable-intl --with-xsl \
+    --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf $OpenSSL_args \
+    --with-mhash --disable-pcntl --enable-sockets --with-xmlrpc --enable-ftp --enable-intl --with-xsl \
     --with-gettext --enable-zip --enable-soap --disable-ipv6 --disable-debug
   else
     ./configure --prefix=$php_install_dir --with-config-file-path=$php_install_dir/etc \
     --with-config-file-scan-dir=$php_install_dir/etc/php.d \
-    --with-fpm-user=$run_user --with-fpm-group=$run_user --enable-fpm $PHP_cache_tmp --disable-fileinfo \
-    --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd \
+    --with-fpm-user=$run_user --with-fpm-group=$run_user --enable-fpm --disable-fileinfo \
+    --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd \
     --with-iconv-dir=/usr/local --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib \
     --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-exif \
     --enable-sysvsem --enable-inline-optimization --with-curl=/usr/local --enable-mbregex \
-    --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf --with-openssl \
-    --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-ftp --enable-intl --with-xsl \
+    --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf $OpenSSL_args \
+    --with-mhash --disable-pcntl --enable-sockets --with-xmlrpc --enable-ftp --enable-intl --with-xsl \
     --with-gettext --enable-zip --enable-soap --disable-ipv6 --disable-debug
   fi
+  sed -i '/^BUILD_/ s/\$(CC)/\$(CXX)/g' Makefile
   make ZEND_EXTRA_LIBS='-liconv' -j ${THREAD}
   make install
 
@@ -114,28 +139,9 @@ Install_PHP70() {
   sed -i 's@^;date.timezone.*@date.timezone = Asia/Shanghai@' $php_install_dir/etc/php.ini
   sed -i 's@^post_max_size.*@post_max_size = 100M@' $php_install_dir/etc/php.ini
   sed -i 's@^upload_max_filesize.*@upload_max_filesize = 50M@' $php_install_dir/etc/php.ini
-  sed -i 's@^max_execution_time.*@max_execution_time = 600@' $php_install_dir/etc/php.ini
-  sed -i 's@^;realpath_cache_size.*@realpath_cache_size = 2M@' $php_install_dir/etc/php.ini
+  sed -i 's@^max_execution_time.*@max_execution_time = 5@' $php_install_dir/etc/php.ini
   sed -i 's@^disable_functions.*@disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server,fsocket,popen@' $php_install_dir/etc/php.ini
   [ -e /usr/sbin/sendmail ] && sed -i 's@^;sendmail_path.*@sendmail_path = /usr/sbin/sendmail -t -i@' $php_install_dir/etc/php.ini
-
-  [ "$PHP_cache" == '1' ] && cat > $php_install_dir/etc/php.d/ext-opcache.ini << EOF
-[opcache]
-zend_extension=opcache.so
-opcache.enable=1
-opcache.enable_cli=1
-opcache.memory_consumption=$Memory_limit
-opcache.interned_strings_buffer=8
-opcache.max_accelerated_files=100000
-opcache.max_wasted_percentage=5
-opcache.use_cwd=1
-opcache.validate_timestamps=1
-opcache.revalidate_freq=60
-opcache.save_comments=0
-opcache.fast_shutdown=1
-opcache.consistency_checks=0
-;opcache.optimization_level=0
-EOF
 
   if [[ ! $Apache_version =~ ^[1-2]$ ]] && [ ! -e "$apache_install_dir/bin/apxs" ]; then
     # php-fpm Init Script
@@ -236,6 +242,6 @@ EOF
     service httpd restart
   fi
   popd
-  [ -e "$php_install_dir/bin/phpize" ] && rm -rf php-$php70_version
+  [ -e "$php_install_dir/bin/phpize" ] && rm -rf php-$php53_version
   popd
 }

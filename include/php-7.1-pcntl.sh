@@ -3,7 +3,7 @@
 # modify by hiyang @ 2016-12-19
 #
 
-Install_PHP70() {
+Install_PHP71() {
   pushd ${oneinstack_dir}/src
 
   tar xzf libiconv-$libiconv_version.tar.gz
@@ -54,8 +54,8 @@ Install_PHP70() {
   id -u $run_user >/dev/null 2>&1
   [ $? -ne 0 ] && useradd -M -s /sbin/nologin $run_user
 
-  tar xzf php-$php70_version.tar.gz
-  pushd php-$php70_version
+  tar xzf php-$php71_version.tar.gz
+  pushd php-$php71_version
   make clean
   ./buildconf
   [ ! -d "$php_install_dir" ] && mkdir -p $php_install_dir
@@ -69,7 +69,7 @@ Install_PHP70() {
     --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-exif \
     --enable-sysvsem --enable-inline-optimization --with-curl=/usr/local --enable-mbregex \
     --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf --with-openssl \
-    --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-ftp --enable-intl --with-xsl \
+    --with-mhash --disable-pcntl --enable-sockets --with-xmlrpc --enable-ftp --enable-intl --with-xsl \
     --with-gettext --enable-zip --enable-soap --disable-ipv6 --disable-debug
   else
     ./configure --prefix=$php_install_dir --with-config-file-path=$php_install_dir/etc \
@@ -80,7 +80,7 @@ Install_PHP70() {
     --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-exif \
     --enable-sysvsem --enable-inline-optimization --with-curl=/usr/local --enable-mbregex \
     --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf --with-openssl \
-    --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-ftp --enable-intl --with-xsl \
+    --with-mhash --disable-pcntl --enable-sockets --with-xmlrpc --enable-ftp --enable-intl --with-xsl \
     --with-gettext --enable-zip --enable-soap --disable-ipv6 --disable-debug
   fi
   make ZEND_EXTRA_LIBS='-liconv' -j ${THREAD}
@@ -236,6 +236,6 @@ EOF
     service httpd restart
   fi
   popd
-  [ -e "$php_install_dir/bin/phpize" ] && rm -rf php-$php70_version
+  [ -e "$php_install_dir/bin/phpize" ] && rm -rf php-$php71_version
   popd
 }

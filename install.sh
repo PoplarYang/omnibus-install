@@ -615,23 +615,6 @@ case "${PHP_version}" in
     ;;
 esac
 
-# ImageMagick or GraphicsMagick
-if [ "$Magick" == '1' ]; then
-  . include/ImageMagick.sh
-  [ ! -d "/usr/local/imagemagick" ] && Install_ImageMagick 2>&1 | tee -a $oneinstack_dir/install.log
-  [ ! -e "`$php_install_dir/bin/php-config --extension-dir`/imagick.so" ] && Install_php-imagick 2>&1 | tee -a $oneinstack_dir/install.log
-elif [ "$Magick" == '2' ]; then
-  . include/GraphicsMagick.sh
-  [ ! -d "/usr/local/graphicsmagick" ] && Install_GraphicsMagick 2>&1 | tee -a $oneinstack_dir/install.log
-  [ ! -e "`$php_install_dir/bin/php-config --extension-dir`/gmagick.so" ] && Install_php-gmagick 2>&1 | tee -a $oneinstack_dir/install.log
-fi
-
-# ionCube
-if [ "$ionCube_yn" == 'y' ]; then
-  . include/ioncube.sh
-  Install_ionCube 2>&1 | tee -a $oneinstack_dir/install.log
-fi
-
 # PHP opcode cache
 case "${PHP_cache}" in
   1)
@@ -660,6 +643,23 @@ esac
 if [ "$ZendGuardLoader_yn" == 'y' ]; then
   . include/ZendGuardLoader.sh
   Install_ZendGuardLoader 2>&1 | tee -a $oneinstack_dir/install.log
+fi
+
+# ImageMagick or GraphicsMagick
+if [ "$Magick" == '1' ]; then
+  . include/ImageMagick.sh
+  [ ! -d "/usr/local/imagemagick" ] && Install_ImageMagick 2>&1 | tee -a $oneinstack_dir/install.log
+  [ ! -e "`$php_install_dir/bin/php-config --extension-dir`/imagick.so" ] && Install_php-imagick 2>&1 | tee -a $oneinstack_dir/install.log
+elif [ "$Magick" == '2' ]; then
+  . include/GraphicsMagick.sh
+  [ ! -d "/usr/local/graphicsmagick" ] && Install_GraphicsMagick 2>&1 | tee -a $oneinstack_dir/install.log
+  [ ! -e "`$php_install_dir/bin/php-config --extension-dir`/gmagick.so" ] && Install_php-gmagick 2>&1 | tee -a $oneinstack_dir/install.log
+fi
+
+# ionCube
+if [ "$ionCube_yn" == 'y' ]; then
+  . include/ioncube.sh
+  Install_ionCube 2>&1 | tee -a $oneinstack_dir/install.log
 fi
 
 # Web server
