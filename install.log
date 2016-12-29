@@ -1,0 +1,15 @@
+include/jdk-1.8.sh: line 7: pushd: /mnt/hgfs/share/github/oneinstack-odm/src: No such file or directory
+error: Failed dependencies:
+	java-headless >= 1:1.6 is needed by (installed) libreoffice-core-1:4.3.7.2-5.el7.x86_64
+	libjvm.so()(64bit) is needed by (installed) libreoffice-ure-1:4.3.7.2-5.el7.x86_64
+	java >= 1.5 is needed by (installed) jline-1.0-8.el7.noarch
+	java >= 1.5 is needed by (installed) jline-1.0-8.el7.noarch
+	java-1.8.0-openjdk is needed by (installed) icedtea-web-1.6.1-4.el7.x86_64
+	java-headless >= 1:1.6 is needed by (installed) libreoffice-core-1:4.3.7.2-5.el7.x86_64
+	libjvm.so()(64bit) is needed by (installed) libreoffice-ure-1:4.3.7.2-5.el7.x86_64
+tar (child): jdk-8u112-linux-x64.tar.gz: Cannot open: No such file or directory
+tar (child): Error is not recoverable: exiting now
+tar: Child returned status 2
+tar: Error is not recoverable: exiting now
+[1;31mJDK install failed, Please contact the author! [0m
+include/jdk-1.8.sh: line 32: popd: directory stack empty
