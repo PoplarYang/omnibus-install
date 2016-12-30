@@ -1,4 +1,4 @@
-####### This shell is modified by hiyang @ 2016-12-13
+#### This shell is modified by hiyang @ 2016-12-13
 This script is written using the shell, in order to quickly deploy `LEMP`/`LAMP`/`LNMP`/`LNMPA`/`LTMP`(Linux, Nginx/Tengine/OpenResty, MySQL in a production environment/MariaDB/Percona, PHP, JAVA), applicable to CentOS 5~7(including redhat)
 
 Script properties:
