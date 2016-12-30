@@ -1,7 +1,11 @@
 #!/bin/bash
+# Author:  Alpha Eva <kaneawk AT gmail.com>
 #
-# modify by hiyang @ 2016-12-19
+# Notes: OneinStack for CentOS/RadHat 5+ Debian 6+ and Ubuntu 12+
 #
+# Project home page:
+#       https://oneinstack.com
+#       https://github.com/lj2007331/oneinstack
 
 checkDownload() {
   mirrorLink=http://mirrors.linuxeye.com/oneinstack/src
