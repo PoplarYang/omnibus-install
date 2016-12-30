@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # modify by hiyang @ 2016-12-29
-# for initial server system only
+# for some common packages install
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 clear
