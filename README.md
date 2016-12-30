@@ -1,4 +1,6 @@
 ### This shell is modified by hiyang @ 2016-12-13
+#### This shell is not original, most of shell is from oneinstack. What I do is to modify some configuration for me to use.
+#### Thanks for oneinstack.
 This script is written using the shell, in order to quickly deploy `LEMP`/`LAMP`/`LNMP`/`LNMPA`/`LTMP`(Linux, Nginx/Tengine/OpenResty, MySQL in a production environment/MariaDB/Percona, PHP, JAVA), applicable to CentOS 5~7(including redhat)
 
 Script properties:
@@ -20,7 +22,7 @@ Script properties:
 - Provide local backup and remote backup (rsync between servers) script
 - Provided under HHVM install CentOS 6,7
 
-## How to use 
+#### How to use
 
 If your server system: CentOS/Redhat (Do not enter "//" and "// subsequent sentence)
 ```bash
@@ -41,7 +43,7 @@ screen -S oneinstack    // If network interruption, you can execute the command 
 ./install.sh   // Do not sh install.sh or bash install.sh such execution
 ```
 
-## How to add Extensions 
+#### How to add Extensions
 
 ```bash
 cd ~/oneinstack    // Must enter the directory execution under oneinstack
@@ -49,28 +51,28 @@ cd ~/oneinstack    // Must enter the directory execution under oneinstack
 
 ```
 
-## How to add a virtual host
+#### How to add a virtual host
 
 ```bash
 cd ~/oneinstack    // Must enter the directory execution under oneinstack
 ./vhost.sh    // Do not sh vhost.sh or bash vhost.sh such execution
 ```
 
-## How to delete a virtual host
+#### How to delete a virtual host
 
 ```bash
 cd ~/oneinstack
 ./vhost.sh del
 ```
 
-## How to add FTP virtual user
+#### How to add FTP virtual user
 
 ```bash
 cd ~/oneinstack
 ./pureftpd_vhost.sh
 ```
 
-## How to backup
+#### How to backup
 
 ```bash
 cd ~/oneinstack
@@ -80,7 +82,7 @@ crontab -l    // Can be added to scheduled tasks, such as automatic backups ever
   0 1 * * * cd ~/oneinstack;./backup.sh  > /dev/null 2>&1 &
 ```
 
-## How to manage service
+#### How to manage service
 
 Nginx/Tengine/OpenResty:
 ```bash
@@ -104,7 +106,7 @@ service httpd {start|restart|stop}
 ```
 Tomcat:
 ```bash
-service tomcat {start|stop|status|restart} 
+service tomcat {start|stop|status|restart}
 ```
 Pure-Ftpd:
 ```bash
@@ -119,19 +121,14 @@ Memcached:
 service memcached {start|stop|status|restart|reload}
 ```
 
-## How to upgrade 
+#### How to upgrade
 
 ```bash
 ./upgrade.sh
 ```
 
-## How to uninstall 
+#### How to uninstall
 
 ```bash
 ./uninstall.sh
 ```
-
-## Installation
-
-For feedback, questions, and to follow the progress of the project (Chinese): <br />
-[OneinStack]<br />
