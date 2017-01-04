@@ -43,11 +43,17 @@ screen -S oneinstack    // If network interruption, you can execute the command 
 ./install.sh   // Do not sh install.sh or bash install.sh such execution
 ```
 
+#### How to add x
+
+```bash
+bash pysh2x
+```
+
 #### How to add Extensions
 
 ```bash
 cd ~/oneinstack    // Must enter the directory execution under oneinstack
-./addons.sh    // Do not sh addons.sh or bash addons.sh such execution
+./InstallPhpExtension.sh    // Do not sh InstallPhpExtension.sh or bash InstallPhpExtension.sh such execution
 
 ```
 
@@ -131,4 +137,16 @@ service memcached {start|stop|status|restart|reload}
 
 ```bash
 ./uninstall.sh
+```
+
+#### How to install tomcat alone
+
+```bash
+./InstallJDKTomcat.sh
+```
+
+#### How to install Php Extension Pcntl alone
+
+```bash
+InstallPhpExtensionPcntl.sh
 ```

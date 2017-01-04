@@ -1,14 +1,14 @@
 #!/bin/bash
 #
 # modify by hiyang @ 2016-12-19
-# Intend for installing extension pcntl for nyjc after php installed.
+# Intend for only installing extension after php installed.
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 clear
 printf "
 #######################################################################
 #                 OneinStack for CentOS/RadHat 5+                     #
-#             Only Pcntl for php install and Other Extension          #
+#                   PHP  extension installing                         #
 #######################################################################
 "
 
@@ -22,36 +22,32 @@ sed -i "s@^oneinstack_dir.*@oneinstack_dir=`pwd`@" ./options.conf
 . ./include/check_dir.sh
 . ./include/download.sh
 . ./include/get_char.sh
-
-echo 'Please select a version of the Apache that you have installed:'
-echo -e "\t${CMSG}1${CEND}. apache 2.2"
-echo -e "\t${CMSG}2${CEND}. apache 2.4"
-read -p "Please input a number:(Default 2 press Enter) " Apache_version
-[ -z "$Apache_version" ] && Apache_version=2
-
+### Setion One: Choose what you feel like to install.
+#+++++++++++++++++++++++++++++++++++  Start  ++++++++++++++++++++++++++++++++++++++
 while :; do echo
-  read -t 15 -p "Do you want to install PHP extended pcntl (Default n press Enter) [y/n]: " PHP_yn
-  [ -z $PHP_yn ] && PHP_yn=n
+  read -t 15 -p "Do you want to install PHP Ext? (Default y press Enter) [y/n]: " PHP_yn
+  [ -z $PHP_yn ] && PHP_yn=y
   if [[ ! $PHP_yn =~ ^[y,n]$ ]]; then
     echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
   else
     if [ "$PHP_yn" == 'y' ]; then
-      [ -e "$php_install_dir/bin/phpize" ] && { echo "${CWARNING}PHP is already installed! ${CEND}"; PHP_yn=Other; break; }
+ #     [ -e "$php_install_dir/bin/phpize" ] && { echo "${CWARNING}PHP already installed! ${CEND}"; PHP_yn=Other; break; }
       while :; do echo
         echo 'Please select a version of the PHP that you have installed:'
-        echo -e "\t${CMSG}1${CEND}. install php-5.3"
-        echo -e "\t${CMSG}2${CEND}. install php-5.4"
-        echo -e "\t${CMSG}3${CEND}. install php-5.5"
-        echo -e "\t${CMSG}4${CEND}. install php-5.6"
-        echo -e "\t${CMSG}5${CEND}. install php-7.0"
-        echo -e "\t${CMSG}6${CEND}. install php-7.1"
+        echo -e "\t${CMSG}1${CEND}. Install php-5.3"
+        echo -e "\t${CMSG}2${CEND}. Install php-5.4"
+        echo -e "\t${CMSG}3${CEND}. Install php-5.5"
+        echo -e "\t${CMSG}4${CEND}. Install php-5.6"
+        echo -e "\t${CMSG}5${CEND}. Install php-7.0"
+        echo -e "\t${CMSG}6${CEND}. Install php-7.1"
         read -p "Please input a number:(Default 4 press Enter) " PHP_version
         [ -z "$PHP_version" ] && PHP_version=4
         if [[ ! $PHP_version =~ ^[1-6]$ ]]; then
           echo "${CWARNING}input error! Please only input number 1,2,3,4,5,6${CEND}"
         else
           while :; do echo
-            read -p "Do you want to install opcode cache of the PHP? [y/n]: " PHP_cache_yn
+            read -p "Do you want to install opcode cache of the PHP?(Default n press Enter) [y/n]: " PHP_cache_yn
+            [ -z "PHP_cache_yn" ] && PHP_cache_yn=n
             if [[ ! $PHP_cache_yn =~ ^[y,n]$ ]]; then
                 echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
             else
@@ -61,6 +57,8 @@ while :; do echo
                     echo 'Please select a opcode cache of the PHP:'
                     echo -e "\t${CMSG}1${CEND}. Install Zend OPcache"
                     echo -e "\t${CMSG}2${CEND}. Install XCache"
+                    echo -e "\t${CMSG}3${CEND}. Install APCU"
+                    echo -e "\t${CMSG}4${CEND}. Install eAccelerator-0.9"
                     read -p "Please input a number:(Default 1 press Enter) " PHP_cache
                     [ -z "$PHP_cache" ] && PHP_cache=1
                     if [[ ! $PHP_cache =~ ^[1-4]$ ]]; then
@@ -75,6 +73,8 @@ while :; do echo
                     echo 'Please select a opcode cache of the PHP:'
                     echo -e "\t${CMSG}1${CEND}. Install Zend OPcache"
                     echo -e "\t${CMSG}2${CEND}. Install XCache"
+                    echo -e "\t${CMSG}3${CEND}. Install APCU"
+                    echo -e "\t${CMSG}4${CEND}. Install eAccelerator-1.0-dev"
                     read -p "Please input a number:(Default 1 press Enter) " PHP_cache
                     [ -z "$PHP_cache" ] && PHP_cache=1
                     if [[ ! $PHP_cache =~ ^[1-4]$ ]]; then
@@ -89,6 +89,7 @@ while :; do echo
                     echo 'Please select a opcode cache of the PHP:'
                     echo -e "\t${CMSG}1${CEND}. Install Zend OPcache"
                     echo -e "\t${CMSG}2${CEND}. Install XCache"
+                    echo -e "\t${CMSG}3${CEND}. Install APCU"
                     read -p "Please input a number:(Default 1 press Enter) " PHP_cache
                     [ -z "$PHP_cache" ] && PHP_cache=1
                     if [[ ! $PHP_cache =~ ^[1-3]$ ]]; then
@@ -103,6 +104,7 @@ while :; do echo
                     echo 'Please select a opcode cache of the PHP:'
                     echo -e "\t${CMSG}1${CEND}. Install Zend OPcache"
                     echo -e "\t${CMSG}2${CEND}. Install XCache"
+                    echo -e "\t${CMSG}3${CEND}. Install APCU"
                     read -p "Please input a number:(Default 1 press Enter) " PHP_cache
                     [ -z "$PHP_cache" ] && PHP_cache=1
                     if [[ ! $PHP_cache =~ ^[1-3]$ ]]; then
@@ -116,6 +118,7 @@ while :; do echo
                   while :; do
                     echo 'Please select a opcode cache of the PHP:'
                     echo -e "\t${CMSG}1${CEND}. Install Zend OPcache"
+                    echo -e "\t${CMSG}3${CEND}. Install APCU"
                     read -p "Please input a number:(Default 1 press Enter) " PHP_cache
                     [ -z "$PHP_cache" ] && PHP_cache=1
                     if [[ ! $PHP_cache =~ ^[1,3]$ ]]; then
@@ -139,7 +142,8 @@ while :; do echo
           # ZendGuardLoader
           if [ "$PHP_version" != '5' -a "$PHP_cache" != '1' -a "${armPlatform}" != "y" ]; then
             while :; do echo
-              read -p "Do you want to install ZendGuardLoader? [y/n]: " ZendGuardLoader_yn
+              read -p "Do you want to install ZendGuardLoader?(Default n press Enter) [y/n]: " ZendGuardLoader_yn
+              [ -z "$ZendGuardLoader_yn" ] && ZendGuardLoader_yn=n
               if [[ ! $ZendGuardLoader_yn =~ ^[y,n]$ ]]; then
                 echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
               else
@@ -151,7 +155,8 @@ while :; do echo
           # ionCube
           if [ "${TARGET_ARCH}" != "arm64" ]; then
             while :; do echo
-              read -p "Do you want to install ionCube? [y/n]: " ionCube_yn
+              read -p "Do you want to install ionCube?(Default n press Enter) [y/n]: " ionCube_yn
+              [ -z "$ionCube_yn" ] && ionCube_yn=n
               if [[ ! $ionCube_yn =~ ^[y,n]$ ]]; then
                 echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
               else
@@ -162,7 +167,8 @@ while :; do echo
 
           # ImageMagick or GraphicsMagick
           while :; do echo
-            read -p "Do you want to install ImageMagick or GraphicsMagick? [y/n]: " Magick_yn
+            read -p "Do you want to install ImageMagick or GraphicsMagick?(Default n press Enter) [y/n]: " Magick_yn
+            [ -z "$Magick_yn" ] && Magick_yn=n
             if [[ ! $Magick_yn =~ ^[y,n]$ ]]; then
               echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
             else
@@ -191,38 +197,29 @@ while :; do echo
     break
   fi
 done
+#------------------------------------  End  ---------------------------------------
+
+### Setion Two: Whether to install binary dependencies packages and download some src.
+#+++++++++++++++++++++++++++++++++++  Start  ++++++++++++++++++++++++++++++++++++++
+# Check binary dependencies packages
+. ./include/InstallPackages.sh
+InstallPackages
+
+# Check download source packages
+. ./include/check_download.sh
+downloadDepsSrc=1
+checkDownload 2>&1 | tee -a ${oneinstack_dir}/install.log
+
+# Install dependencies from source package
+. ./include/check_sw.sh
+installDepsBySrc 2>&1 | tee -a ${oneinstack_dir}/install.log
+#------------------------------------  End  ---------------------------------------
 
 # get memory limit
 . include/memory.sh
 
-# PHP
-case "${PHP_version}" in
-  1)
-    . include/php-5.3-pcntl.sh
-    Install_PHP53 2>&1 | tee -a ${oneinstack_dir}/install.log
-    ;;
-  2)
-    . include/php-5.4-pcntl.sh
-    Install_PHP54 2>&1 | tee -a ${oneinstack_dir}/install.log
-    ;;
-  3)
-    . include/php-5.5-pcntl.sh
-    Install_PHP55 2>&1 | tee -a ${oneinstack_dir}/install.log
-    ;;
-  4)
-    . include/php-5.6-pcntl.sh
-    Install_PHP56 2>&1 | tee -a ${oneinstack_dir}/install.log
-    ;;
-  5)
-    . include/php-7.0-pcntl.sh
-    Install_PHP70 2>&1 | tee -a ${oneinstack_dir}/install.log
-    ;;
-  6)
-    . include/php-7.1-pcntl.sh
-    Install_PHP71 2>&1 | tee -a ${oneinstack_dir}/install.log
-    ;;
-esac
-
+### Setion Three: Install what you select, what you need do is wait.
+#+++++++++++++++++++++++++++++++++++  Start  ++++++++++++++++++++++++++++++++++++++
 # PHP opcode cache
 case "${PHP_cache}" in
   1)
@@ -234,6 +231,16 @@ case "${PHP_cache}" in
   2)
     . include/xcache.sh
     Install_XCache 2>&1 | tee -a ${oneinstack_dir}/install.log
+    ;;
+  3)
+    . include/apcu.sh
+    Install_APCU 2>&1 | tee -a ${oneinstack_dir}/install.log
+    ;;
+  4)
+    if [[ "${PHP_version}" =~ ^[1,2]$ ]]; then
+      . include/eaccelerator.sh
+      Install_eAccelerator 2>&1 | tee -a ${oneinstack_dir}/install.log
+    fi
     ;;
 esac
 
@@ -259,7 +266,4 @@ if [ "$ZendGuardLoader_yn" == 'y' ]; then
   . include/ZendGuardLoader.sh
   Install_ZendGuardLoader 2>&1 | tee -a $oneinstack_dir/install.log
 fi
-
-# for pcntl extension
-. include/pcntl.sh
-Install_pcntl 2>&1 | tee -a $oneinstack_dir/install.log
+#------------------------------------  End  ---------------------------------------
