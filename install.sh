@@ -339,7 +339,8 @@ while :; do echo
 
           if [ "$PHP_version" != '5' -a "$PHP_cache" != '1' -a "${armPlatform}" != "y" ]; then
             while :; do echo
-              read -p "Do you want to install ZendGuardLoader? [y/n]: " ZendGuardLoader_yn
+              read -p "Do you want to install ZendGuardLoader(Default n press Enter)? [y/n]: " ZendGuardLoader_yn
+              [ -z "$ZendGuardLoader_yn" ] && ZendGuardLoader_yn=n
               if [[ ! $ZendGuardLoader_yn =~ ^[y,n]$ ]]; then
                 echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
               else
@@ -351,7 +352,8 @@ while :; do echo
           # ionCube
           if [ "${TARGET_ARCH}" != "arm64" ]; then
             while :; do echo
-              read -p "Do you want to install ionCube? [y/n]: " ionCube_yn
+              read -p "Do you want to install ionCube?(Default n press Enter) [y/n]: " ionCube_yn
+              [ -z "$ionCube_yn" ] && ionCube_yn=n
               if [[ ! $ionCube_yn =~ ^[y,n]$ ]]; then
                 echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
               else
@@ -362,7 +364,8 @@ while :; do echo
 
           # ImageMagick or GraphicsMagick
           while :; do echo
-            read -p "Do you want to install ImageMagick or GraphicsMagick? [y/n]: " Magick_yn
+            read -p "Do you want to install ImageMagick or GraphicsMagick?(Default n press Enter) [y/n]: " Magick_yn
+            [ -z "$Magick_yn" ] && Magick_yn=n
             if [[ ! $Magick_yn =~ ^[y,n]$ ]]; then
               echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
             else
@@ -504,7 +507,6 @@ checkDownload 2>&1 | tee -a ${oneinstack_dir}/install.log
 # Install dependencies from source package
 . ./include/check_sw.sh
 installDepsBySrc 2>&1 | tee -a ${oneinstack_dir}/install.log
-
 
 #+++++++++++++++++++++++++++++++++++  Start  ++++++++++++++++++++++++++++++++++++++
 # jemalloc
@@ -709,6 +711,7 @@ case "${JDK_version}" in
     ;;
 esac
 
+# Tomcat
 case "${Tomcat_version}" in
   1)
     . include/tomcat-8.sh
