@@ -150,3 +150,6 @@ service memcached {start|stop|status|restart|reload}
 ```bash
 InstallPhpExtensionPcntl.sh
 ```
+
+#### How to test web
+you can access ip/oka for test file.
