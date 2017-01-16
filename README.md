@@ -148,8 +148,8 @@ service memcached {start|stop|status|restart|reload}
 #### How to install Php Extension Pcntl alone
 
 ```bash
-InstallPhpExtensionPcntl.sh
+./InstallPhpExtensionPcntl.sh
 ```
 
 #### How to test web
-you can access ip/oka for test file.
+You can access ip/oka for test file.
