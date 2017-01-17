@@ -27,7 +27,7 @@ sed -i "s@^oneinstack_dir.*@oneinstack_dir=`pwd`@" ./options.conf
 [ $(id -u) != "0" ] && { echo "${CFAILURE}Error: You must be root to run this script${CEND}"; exit 1; }
 
 # Use default SSH port 22. If you use another SSH port on your server
-. /include/init_sshd.sh
+. ./include/init_sshd.sh
 InitSshd
 
 #+++++++++++++++++++++++++++++++++++  End of Function  ++++++++++++++++++++++++++++++++++++++
@@ -47,8 +47,7 @@ InstallPackages
 
 #----------------------------------  Start of Function  -------------------------------------
 # init
-. ./include/CustomizeOS.sh
-CustomizeOS
+./include/init_CentOS.sh
 #+++++++++++++++++++++++++++++++++++  End of Function  ++++++++++++++++++++++++++++++++++++++
 
 #----------------------------------  Start of Function  -------------------------------------
