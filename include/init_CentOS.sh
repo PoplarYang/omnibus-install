@@ -8,7 +8,7 @@ echo "${CBLUE}               Init CentOS${CEND}"
 echo "STEP 1: ${CMSG}closed Unnecessary services and remove obsolete rpm package${CEND}"
 [ "${CentOS_RHEL_version}" == '7' ] && [ "$(systemctl is-active NetworkManager.service)" == 'active' ] && NM_flag=1
 [ "${NM_flag}" == '1' ] && systemctl enable NetworkManager.service
-for Service in sshd network crond iptables messagebus irqbalance syslog rsyslog;do
+for Service in sshd network crond messagebus irqbalance syslog rsyslog;do
   chkconfig --level 3 ${Service} on 2> /dev/null
 done
 
@@ -120,45 +120,6 @@ net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 EOF
 sysctl -p && echo -e "${CMSG}Step 5 is successfully!${CEND}\n"
-
-# iptables
-echo "STEP 6: ${CMSG}Modify iptables${CEND}"
-if [ -e "/etc/sysconfig/iptables" ] && [ -n "$(grep '^:INPUT DROP' /etc/sysconfig/iptables)" -a -n "$(grep 'NEW -m tcp --dport 22 -j ACCEPT' /etc/sysconfig/iptables)" -a -n "$(grep 'NEW -m tcp --dport 80 -j ACCEPT' /etc/sysconfig/iptables)" ]; then
-  IPTABLES_STATUS=yes
-else
-  IPTABLES_STATUS=no
-fi
-
-if [ "$IPTABLES_STATUS" == "no" ]; then
-  [ -e "/etc/sysconfig/iptables" ] && /bin/mv /etc/sysconfig/iptables{,_bk}
-  cat > /etc/sysconfig/iptables << EOF
-# Firewall configuration written by system-config-securitylevel
-# Manual customization of this file is not recommended.
-*filter
-:INPUT DROP [0:0]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [0:0]
-:syn-flood - [0:0]
--A INPUT -i lo -j ACCEPT
--A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
--A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
--A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
--A INPUT -p icmp -m limit --limit 1/sec --limit-burst 10 -j ACCEPT
--A INPUT -f -m limit --limit 100/sec --limit-burst 100 -j ACCEPT
--A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j syn-flood
--A INPUT -j REJECT --reject-with icmp-host-prohibited
--A syn-flood -p tcp -m limit --limit 3/sec --limit-burst 6 -j RETURN
--A syn-flood -j REJECT --reject-with icmp-port-unreachable
-COMMIT
-EOF
-fi
-
-FW_PORT_FLAG=$(grep -ow "dport ${SSH_PORT}" /etc/sysconfig/iptables)
-[ -z "${FW_PORT_FLAG}" -a "${SSH_PORT}" != "22" ] && sed -i "s@dport 22 -j ACCEPT@&\n-A INPUT -p tcp -m state --state NEW -m tcp --dport ${SSH_PORT} -j ACCEPT@" /etc/sysconfig/iptables
-service iptables restart
-service sshd restart
-echo -e "${CMSG}Step 6 is successfully!${CEND}\n"
 
 if [ "${CentOS_RHEL_version}" == '5' ]; then
   sed -i 's@^[3-6]:2345:respawn@#&@g' /etc/inittab

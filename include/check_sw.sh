@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 # modify by hiyang @ 2016-12-19
 
 installDepsCentOS() {
@@ -12,9 +12,9 @@ installDepsCentOS() {
   echo "${CMSG}Removing the conflicting packages...${CEND}"
   if [ "${CentOS_RHEL_version}" == '7' ]; then
     yum -y groupremove "Basic Web Server" "MySQL Database server" "MySQL Database client" "File and Print Server"
-    yum -y install iptables-services
-    systemctl mask firewalld.service
-    systemctl enable iptables.service
+#    yum -y install iptables-services
+#    systemctl mask firewalld.service
+#    systemctl enable iptables.service
   elif [ "${CentOS_RHEL_version}" == '6' ]; then
     yum -y groupremove "FTP Server" "PostgreSQL Database client" "PostgreSQL Database server" "MySQL Database server" "MySQL Database client" "Web Server" "Office Suite and Productivity" "E-mail server" "Ruby Support" "Printing client" &> /dev/null && echo "${CMSG}Uninstall the conflicting packages successfully${CEND}"
   elif [ "${CentOS_RHEL_version}" == '5' ]; then
@@ -33,7 +33,7 @@ installDepsCentOS() {
 
   # use gcc-4.4
   if [ -n "$(gcc --version | head -n1 | grep '4\.1\.')" ]; then
-    yum -y install gcc44 gcc44-c++ libstdc++44-devel &> /dev/null && echo "${CMSG}install packages [ gcc-4.4 ] successfully${CEND}" 
+    yum -y install gcc44 gcc44-c++ libstdc++44-devel &> /dev/null && echo "${CMSG}install packages [ gcc-4.4 ] successfully${CEND}"
     export CC="gcc44" CXX="g++44"
   fi
 }
