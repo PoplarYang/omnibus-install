@@ -14,14 +14,12 @@ done
 
 for Service in $(chkconfig --list | grep 3:on | awk '{print $1}' | grep -vE 'nginx|httpd|tomcat|mysqld|php-fpm|pureftpd|redis-server|memcached|supervisord|aegis|NetworkManager');do
   chkconfig --level 3 ${Service} off 2> /dev/null
-done
-echo -e "${CMSG}Step 1 is successfully!${CEND}\n"
+done && echo -e "${CMSG}Step 1 is successfully!${CEND}\n"
 
 # Close SELINUX
 echo "STEP 2: ${CMSG}Close SELINUX${CEND}"
 setenforce 0
-sed -i 's/^SELINUX=.*$/SELINUX=disabled/' /etc/selinux/config
-echo -e "${CMSG}Step 2 is successfully!${CEND}\n"
+sed -i 's/^SELINUX=.*$/SELINUX=disabled/' /etc/selinux/config && echo -e "${CMSG}Step 2 is successfully!${CEND}\n"
 
 # Custom profile
 echo "STEP 3: ${CMSG}Custom profile${CEND}"
@@ -44,8 +42,7 @@ EOF
 
 [ -z "$(grep ^'PROMPT_COMMAND=' /etc/bashrc)" ] && cat >> /etc/bashrc << EOF
 PROMPT_COMMAND='{ msg=\$(history 1 | { read x y; echo \$y; });logger "[euid=\$(whoami)]":\$(who am i):[\`pwd\`]"\$msg"; }'
-EOF
-echo -e "${CMSG}Step 3 is successfully!${CEND}\n"
+EOF && echo -e "${CMSG}Step 3 is successfully!${CEND}\n"
 
 # /etc/security/limits.conf
 echo "STEP 4: ${CMSG}Modify limits.conf${CEND}"
@@ -57,8 +54,7 @@ cat >> /etc/security/limits.conf <<EOF
 * hard nproc 65535
 * soft nofile 65535
 * hard nofile 65535
-EOF
-echo -e "${CMSG}Step 4 is successfully!${CEND}\n"
+EOF && echo -e "${CMSG}Step 4 is successfully!${CEND}\n"
 
 # /etc/hosts
 echo "STEP 4: ${CMSG}Modify hosts and timezone and update time${CEND}"
@@ -70,8 +66,7 @@ ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 # Update time
 ntpdate pool.ntp.org
-[ ! -e "/var/spool/cron/root" -o -z "$(grep 'ntpdate' /var/spool/cron/root)" ] && { echo "*/20 * * * * $(which ntpdate) pool.ntp.org > /dev/null 2>&1" >> /var/spool/cron/root;chmod 600 /var/spool/cron/root; }
-echo -e "${CMSG}Step 4 is successfully!${CEND}\n"
+[ ! -e "/var/spool/cron/root" -o -z "$(grep 'ntpdate' /var/spool/cron/root)" ] && { echo "*/20 * * * * $(which ntpdate) pool.ntp.org > /dev/null 2>&1" >> /var/spool/cron/root;chmod 600 /var/spool/cron/root; } && echo -e "${CMSG}Step 4 is successfully!${CEND}\n"
 
 # Set DNS
 #cat > /etc/resolv.conf << EOF
@@ -124,8 +119,7 @@ EOF
 net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 EOF
-sysctl -p
-echo -e "${CMSG}Step 5 is successfully!${CEND}\n"
+sysctl -p && echo -e "${CMSG}Step 5 is successfully!${CEND}\n"
 
 # iptables
 echo "STEP 6: ${CMSG}Modify iptables${CEND}"
