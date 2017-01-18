@@ -10,7 +10,6 @@ printf "
 #                 OneinStack odm for CentOS/RadHat 5+                 #
 #######################################################################
 "
-
 # get pwd
 sed -i "s@^oneinstack_dir.*@oneinstack_dir=$(pwd)@" ./options.conf
 
@@ -22,6 +21,9 @@ sed -i "s@^oneinstack_dir.*@oneinstack_dir=$(pwd)@" ./options.conf
 . ./include/check_download.sh
 . ./include/download.sh
 . ./include/get_char.sh
+
+. ./include/init_sshd.sh
+InitSshd
 
 if [ "${CentOS_RHEL_version}" == '7' ]; then
   yum -y install iptables-services
