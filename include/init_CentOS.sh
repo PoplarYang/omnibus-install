@@ -23,7 +23,7 @@ sed -i 's/^SELINUX=.*$/SELINUX=disabled/' /etc/selinux/config && echo -e "${CMSG
 
 # Custom profile
 echo "STEP 3: ${CMSG}Custom profile${CEND}"
-cat > /etc/profile.d/oneinstack.sh << EOF
+cat >> /etc/profile.d/oneinstack.sh << EOF
 HISTSIZE=3000
 PROMPT_COMMAND="history -a"
 HISTTIMEFORMAT="%F %T \$(whoami) "
@@ -40,21 +40,25 @@ alias egrep='egrep --color'
 alias fgrep='fgrep --color'
 EOF
 
-[ -z "$(grep ^'PROMPT_COMMAND=' /etc/bashrc)" ] && cat >> /etc/bashrc << EOF
+if [ -z "$(grep ^'PROMPT_COMMAND=' /etc/bashrc)" ]; then
+    cat >> /etc/bashrc << EOF
 PROMPT_COMMAND='{ msg=\$(history 1 | { read x y; echo \$y; });logger "[euid=\$(whoami)]":\$(who am i):[\`pwd\`]"\$msg"; }'
-EOF && echo -e "${CMSG}Step 3 is successfully!${CEND}\n"
+EOF
+echo -e "${CMSG}Step 3 is successfully!${CEND}\n"
+fi
 
 # /etc/security/limits.conf
 echo "STEP 4: ${CMSG}Modify limits.conf${CEND}"
-[ -e /etc/security/limits.d/*nproc.conf ] && rename nproc.conf nproc.conf_bk /etc/security/limits.d/*nproc.conf
-sed -i '/^# End of file/,$d' /etc/security/limits.conf
-cat >> /etc/security/limits.conf <<EOF
+if [ -e /etc/security/limits.d/*nproc.conf ] && rename nproc.conf nproc.conf_bk /etc/security/limits.d/*nproc.conf && sed -i '/^# End of file/,$d' /etc/security/limits.conf; then
+    cat >> /etc/security/limits.conf << EOF
 # End of file
 * soft nproc 65535
 * hard nproc 65535
 * soft nofile 65535
 * hard nofile 65535
-EOF && echo -e "${CMSG}Step 4 is successfully!${CEND}\n"
+EOF
+echo -e "${CMSG}Step 4 is successfully!${CEND}\n"
+fi
 
 # /etc/hosts
 echo "STEP 4: ${CMSG}Modify hosts and timezone and update time${CEND}"
@@ -69,7 +73,7 @@ ntpdate pool.ntp.org
 [ ! -e "/var/spool/cron/root" -o -z "$(grep 'ntpdate' /var/spool/cron/root)" ] && { echo "*/20 * * * * $(which ntpdate) pool.ntp.org > /dev/null 2>&1" >> /var/spool/cron/root;chmod 600 /var/spool/cron/root; } && echo -e "${CMSG}Step 4 is successfully!${CEND}\n"
 
 # Set DNS
-#cat > /etc/resolv.conf << EOF
+#cat >> /etc/resolv.conf << EOF
 #nameserver 114.114.114.114
 #nameserver 8.8.8.8
 #EOF
@@ -82,7 +86,7 @@ echo options nf_conntrack hashsize=131072 > /etc/modprobe.d/nf_conntrack.conf
 # /etc/sysctl.conf
 echo "STEP 5: ${CMSG}Modify sysctl.conf${CEND}"
 [ ! -e "/etc/sysctl.conf_bk" ] && /bin/mv /etc/sysctl.conf{,_bk}
-cat > /etc/sysctl.conf << EOF
+cat >> /etc/sysctl.conf << EOF
 fs.file-max=65535
 net.ipv4.tcp_max_tw_buckets = 60000
 net.ipv4.tcp_sack = 1
